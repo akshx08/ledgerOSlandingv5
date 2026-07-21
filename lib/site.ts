@@ -30,43 +30,10 @@ export const ROUTE = [
  * copy is deliberately sparse — the visitor is meant to be watching, not
  * reading, until the arrival.
  */
-export const JOURNEY = [
-  {
-    at: 0.0,
-    era: "Bahi-khata",
-    note: "A single book. One hand. Everything the business is, written down once and trusted.",
-  },
-  {
-    at: 0.17,
-    era: "Press",
-    note: "Printed and bound. More of it, faster, and for the first time not written by the person who knew it.",
-  },
-  {
-    at: 0.34,
-    era: "Cabinet",
-    note: "Filed. Findable, in principle, by someone who knows where to look.",
-  },
-  {
-    at: 0.5,
-    era: "Sheet",
-    note: "Tabulated. The grid arrives and never leaves. Arithmetic gets easy; meaning gets harder.",
-  },
-  {
-    at: 0.67,
-    era: "Network",
-    note: "Everywhere at once. Mail, drives, portals, phones. Nothing is lost and nothing can be found.",
-  },
-  {
-    at: 0.84,
-    era: "Flood",
-    note: "More record than any practice can read. The information is complete and the understanding is gone.",
-  },
-];
-
-export const ARRIVAL = {
-  head: ["Accounting never", "evolved.", "Only its paper did."],
-  sub: "Every form the ledger has taken changed how much a business could record — and none of them changed what it takes to understand one. That is the part LedgerOS is for.",
-  cue: "Begin",
+export const HERO = {
+  head: ["Every dot.", "One unbroken line."],
+  sub: "A kolam is a grid of fixed dots and a single line drawn around them — it may cross and double back, but it may not lift, it may not miss a dot, and it must close where it began. Drawn at dawn, from memory, in rice flour. It is the oldest picture anyone has of a set of books that balances.",
+  note: "LedgerOS draws that line through the record of a practice.",
 };
 
 export const PROBLEM = {
