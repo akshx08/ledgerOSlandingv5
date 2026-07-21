@@ -1,26 +1,143 @@
 @import "tailwindcss";
 
+/*
+ * LEDGEROS — "THE LONG LEDGER"
+ *
+ * The site has no colour scheme. It has a date.
+ *
+ * Every surface colour is a live variable written by lib/era.ts from scroll
+ * position, sampled from the materials of that moment in the record's
+ * history: daylight on handmade paper at the start, a quiet dark lit by the
+ * system itself at the end. The tokens below are therefore deliberately
+ * indirect — they point at variables that move.
+ *
+ * The static values here are only the first frame, so the page is correct
+ * before a single line of JavaScript runs.
+ */
+@theme {
+  --color-ground: var(--ground);
+  --color-surface: var(--surface);
+  --color-fg: var(--fg);
+  --color-fg-soft: var(--fg-soft);
+  --color-fg-faint: var(--fg-faint);
+  --color-accent: var(--accent);
+  --color-line: var(--line);
+
+  --font-display: var(--font-display-face), serif;
+  --font-body: var(--font-body-face), sans-serif;
+  --font-hand: var(--font-hand-face), cursive;
+
+  /* mass leaves abruptly and arrives slowly — nothing eases symmetrically */
+  --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-lift: cubic-bezier(0.7, 0, 0.84, 0);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* era 0 — full daylight on handmade paper */
+  --ground: oklch(0.905 0.028 82);
+  --surface: oklch(0.86 0.032 74);
+  --fg: oklch(0.282 0.026 64);
+  --fg-soft: oklch(0.4 0.026 64);
+  --fg-faint: oklch(0.488 0.026 64);
+  --accent: oklch(0.474 0.16 32);
+  --line: oklch(0.72 0.026 70);
+  /* the first frame is full daylight, so everything is readable */
+  --legible: 1;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  /* contains horizontal overflow without becoming a scroll container — a
+     scrollport between a fixed stage and the viewport breaks the stage */
+  overflow-x: clip;
+  background: var(--ground);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--ground);
+  color: var(--fg);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  /*
+   * NOTHING IN THIS SITE TRANSITIONS A COLOUR — not here, not on a hover, not
+   * anywhere. That is a hard rule, and it is load-bearing.
+   *
+   * lib/era.ts already interpolates every colour continuously and writes it
+   * each frame, so a CSS transition adds no smoothness. What it does add is
+   * lag: the ground arrives up to half a second after the ink that was solved
+   * against it, and scrolling quickly through the inversion that lag puts
+   * light type on a light ground — the exact failure the lights-out band
+   * exists to prevent. Worse, a transition that is interrupted before its
+   * first frame never advances at all, so a throttled tab strands the whole
+   * page on the opening palette while every custom property reads correct.
+   * That one cost this build eight elements sitting under 2:1 on dark rooms.
+   *
+   * Hover states therefore snap. A pencil mark in a margin does not ease in.
+   */
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--ground);
+}
+
+/*
+ * Display is a serif, because this story starts in a hand-ruled book and a
+ * grotesque would be lying about where it begins. It is the one element that
+ * does NOT modernise across the journey — the argument being that the
+ * discipline of bookkeeping is the constant, and only its medium changes.
+ */
+.folio {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.018em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.folio-sm {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+/* ruled entries — the values a ledger actually carries */
+.entry {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.005em;
+}
+
+/* marginalia — dates, folio numbers, the clerk's own notes */
+.margin {
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.rule {
+  border-color: var(--line);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+canvas {
+  display: block;
+  touch-action: pan-y;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
