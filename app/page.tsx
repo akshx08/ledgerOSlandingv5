@@ -3,37 +3,73 @@
 /**
  * Home.
  *
- * The hero is a kolam being drawn — see components/hero/Kolam.tsx for why
- * that is the right first image for this company. It takes one screen and
- * about eight seconds, and it is not attached to scroll: you are not
- * operating it, you are watching someone finish something.
+ * Two acts, about two seconds apart.
  *
- * The page holds a single moment of the record's history rather than
- * travelling through one. Everything below the fold is argument, and argument
- * should sit still.
+ * First the overture: six hard cuts through the materials the record has been
+ * kept in, each one slamming the whole document to that century's palette.
+ * Then it lands in the present and the room it lands in is the Atrium — a
+ * kolam on the floor with the surfaces LedgerOS actually produces hanging
+ * above it, each tethered down to the one unbroken line.
+ *
+ * Neither act is attached to scroll. You are not operating this. Everything
+ * below the fold is argument, and argument sits still.
  */
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { applyPalette } from "@/lib/era";
 import { CTA, ENDING, HERO, PROBLEM, TURN, VAULTS } from "@/lib/site";
 
-const Kolam = dynamic(() => import("@/components/hero/Kolam"), { ssr: false });
+const Overture = dynamic(() => import("@/components/hero/Overture"), { ssr: false });
+const Atrium = dynamic(() => import("@/components/hero/Atrium"), { ssr: false });
 
 export default function Home() {
-  // the hour before the household wakes, and the light the system makes
+  const [arrived, setArrived] = useState(false);
+
+  // the page must not scroll while the centuries are going past
   useEffect(() => {
-    applyPalette(1);
-  }, []);
+    if (arrived) return;
+    const prev = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    return () => {
+      document.documentElement.style.overflow = prev;
+    };
+  }, [arrived]);
 
   return (
     <main className="relative z-10">
-      {/* ── the threshold ── */}
-      <section className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden px-5 pb-[14vh] pt-28 md:justify-center md:px-10 md:pb-0 md:pt-0">
-        <Kolam className="pointer-events-none absolute inset-0" />
+      <Overture onDone={() => setArrived(true)} />
 
-        <div className="relative z-10 max-w-[34rem]">
+      {/* ── the atrium ── */}
+      <section className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden px-5 pb-[14vh] pt-28 md:justify-center md:px-10 md:pb-0 md:pt-0">
+        <Atrium className="pointer-events-none absolute inset-0" active={arrived} />
+
+        {/* The kolam is laid on the floor of the room, and the floor runs the
+            whole width of it. This lifts the ground back up under the words
+            only, so the copy is never read against the weave. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(64% 58% at 0% 50%, var(--ground) 0%, var(--ground) 44%, transparent 82%)",
+          }}
+        />
+
+        {/* Opacity is binary and never transitioned. A transition that is
+            interrupted before its first frame never advances, so a throttled
+            tab strands the property at its start value — and stranding THIS
+            one hides the entire headline while the inline style cheerfully
+            reads opacity: 1. Only the lift is animated; if that freezes, the
+            words are 14px low and perfectly legible. */}
+        <div
+          className="relative z-10 max-w-[34rem] transition-transform duration-[1100ms] ease-[var(--ease-settle)]"
+          style={{
+            opacity: arrived ? 1 : 0,
+            transform: arrived ? "none" : "translate3d(0, 14px, 0)",
+            transitionDelay: arrived ? "260ms" : "0ms",
+          }}
+        >
           <h1 className="folio text-[clamp(2.4rem,6.2vw,4.8rem)]">
             {HERO.head.map((l) => (
               <span key={l} className="block">

@@ -35,45 +35,62 @@ ground: primary ≈ 11:1, secondary ≈ 7:1, tertiary ≈ 4.8:1. The accent is s
 against both the ground *and* the raised surface, because small accent text
 appears on each.
 
-## The hero
+## The hero — two acts
 
-A kolam, drawn.
+### 1. The overture (1.3s)
+
+Six hard cuts, ~200ms each, no morphing and no easing: bahi-khata, press,
+cabinet, sheet, network, flood. Each cut slams the **whole document** to that
+era's palette — the nav marks, the ground, the type — so the entire page flashes
+through the centuries and lands in the present. `lib/era.ts` is used as a cut
+list rather than as a continuous journey.
+
+Driven by `setTimeout`, not `requestAnimationFrame`: these are discrete states,
+nothing interpolates between frames, and a timer keeps the cadence honest in a
+tab whose animation clock is throttled.
+
+Reduced motion skips it entirely. Six full-screen flashes in a second is
+exactly the pattern that preference exists to suppress.
+
+`?flash=3` freezes the montage on one cut.
+
+### 2. The atrium
+
+A kolam is laid on the floor and you are standing at the edge of it.
 
 Before the household wakes, the threshold is swept and wetted and a kolam is
 laid on it: first the pulli, a grid of dots placed from memory, then a single
-line threaded around them. A sikku kolam has rules — the line may loop, cross
-and double back, but it may not lift, it may not leave a dot unaccounted for,
-and it must return to the point it began. It is drawn in rice flour, walked
-over by noon, and drawn again the next morning.
+line threaded around them. A sikku kolam may loop, cross and double back, but
+it may not lift, it may not leave a dot unaccounted for, and it must return to
+where it began. It is the oldest picture anyone has of a set of books that
+balances — and mathematicians study kolam as formal grammars for exactly that
+reason.
 
-That is the oldest picture anyone has of a set of books that balances: a field
-of separate marks, and the claim that one continuous line can pass around all
-of them and come back to where it started. Mathematicians study kolam as
-formal grammars for exactly that reason.
+The weave is derived, not drawn: a ray at 45° reflecting inside a 9×7 lattice.
+Two conditions make it a kolam rather than a scribble —
 
-The weave is not drawn by hand or by an artist. It is a ray at 45° reflecting
-off the walls of a 9×7 lattice — the skeleton of a real sikku kolam, which
-falls out of the grid rather than being invented on it. Two constraints make
-it work:
-
-- the sides are **coprime**, so the path closes into exactly one loop instead
-  of several — the same reason a real kolam grid is chosen with care before a
-  single dot is laid;
+- the sides are **coprime**, so the path closes into exactly one loop instead of
+  several;
 - the ray runs on a **doubled lattice offset by one**, so it can never reach a
-  corner. At a corner both components of the direction flip at once, which is
-  a reversal rather than a reflection: the ray turns round and retraces its own
+  corner. At a corner both direction components flip at once, which is a
+  reversal rather than a reflection: the ray turns round and retraces its own
   route, and the kolam collapses into a line walked there and back.
 
-The line itself is an arc-length-parameterised ribbon revealed by a single
-`uHead` uniform, with the flour's grain, its soft edge and its gaps done in the
-fragment shader. The hand wavers and presses unevenly — both wobbles are
-periodic in arc length so the loop has no seam where it closes.
+Above the floor hang the surfaces LedgerOS actually produces — a document read
+and scored, a reconciliation, an identity resolved out of four spellings, a
+filing that runs itself, a forecast given as a range. Each is tethered to the
+floor by a single thread, because none of them is free-standing: every one is a
+point on the same unbroken line.
 
-It takes one screen and about eight seconds, and **nothing about it is attached
-to scroll.** You are not operating it. You are watching someone finish
-something.
+The panels carry **real numbers, the same ones the vault pages carry**. They are
+drawn with the 2D canvas API and mapped onto planes, so their type is genuinely
+typeset in the site's own faces and palette rather than modelled or faked.
 
-`?draw=0.4` freezes the hand mid-stroke.
+On a phone the panels are dropped. At 375px a card is ninety pixels across and
+its type is a smear, so the room shows the floor alone — the same argument,
+legible at any size.
+
+`?still=1` holds the finished room.
 
 ## The five worlds
 
@@ -108,8 +125,9 @@ npm run build
 
 ### Tuning surface
 
-- `?draw=0.42` — freeze the kolam mid-stroke; also the only way to photograph
-  a finished one where the tab throttles `requestAnimationFrame`
+- `?flash=3` — freeze the overture on one of its six cuts
+- `?still=1` — hold the finished atrium; also the only way to photograph it
+  where the tab throttles `requestAnimationFrame`
 - `?native=1` — disable smooth scrolling
 
 ## Waitlist
